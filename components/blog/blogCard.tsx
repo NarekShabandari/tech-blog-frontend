@@ -32,6 +32,7 @@ export function BlogCard({
             src={cover_image}
             alt={blogTitle}
             fill
+            loading="eager"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
           />
         </div>

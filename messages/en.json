@@ -4,7 +4,8 @@
     "blog": "Blog",
     "about": "About",
     "tags": "Tags",
-    "login": "Login"
+    "login": "Login",
+    "logout":"Logout"
   },
   "login": {},
   "blog": { "readMore": "Read more", "minRead": "min read" },
