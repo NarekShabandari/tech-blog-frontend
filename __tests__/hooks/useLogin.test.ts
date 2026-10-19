@@ -9,9 +9,9 @@ jest.mock("@/lib/axios", () => ({
   apiClient: { post: jest.fn() },
 }));
 
-const mockPush = jest.fn();
+const mockReplace = jest.fn();
 jest.mock("next/navigation", () => ({
-  useRouter: () => ({ push: mockPush }),
+  useRouter: () => ({ replace: mockReplace }),
 }));
 
 jest.mock("next-intl", () => ({
@@ -62,7 +62,7 @@ describe("useLogin — initial state", () => {
 describe("useLogin — successful login", () => {
   beforeEach(() => {
     mockPost.mockClear();
-    mockPush.mockClear();
+    mockReplace.mockClear();
   });
 
   it("calls POST /auth/login with the provided credentials", async () => {
@@ -84,7 +84,7 @@ describe("useLogin — successful login", () => {
     act(() => result.current.mutate(credentials));
     await waitFor(() => expect(result.current.isSuccess).toBe(true));
 
-    expect(mockPush).toHaveBeenCalledWith("/en/");
+    expect(mockReplace).toHaveBeenCalledWith("/en/");
   });
 
   it("updates the [auth, me] query cache with the returned user", async () => {
@@ -119,7 +119,7 @@ describe("useLogin — successful login", () => {
 describe("useLogin — failed login", () => {
   beforeEach(() => {
     mockPost.mockClear();
-    mockPush.mockClear();
+    mockReplace.mockClear();
   });
 
   it("sets isError on API failure", async () => {
@@ -151,7 +151,7 @@ describe("useLogin — failed login", () => {
     act(() => result.current.mutate(credentials));
     await waitFor(() => expect(result.current.isError).toBe(true));
 
-    expect(mockPush).not.toHaveBeenCalled();
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 
   it("does not update the query cache on failure", async () => {
