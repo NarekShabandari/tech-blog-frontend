@@ -19,6 +19,17 @@ export function usePosts(params?: { category?: string; search?: string }) {
   });
 }
 
+export function useMyPosts(params?: { category?: string; search?: string }) {
+  return useQuery({
+    queryKey: postKeys.list(params ?? {}),
+    queryFn: async () => {
+      const { data } = await apiClient.get("/posts/my", { params });
+      return data.posts;
+    },
+    staleTime: 60_000,
+  });
+}
+
 export function usePost(slug: string) {
   return useQuery({
     queryKey: postKeys.detail(slug),

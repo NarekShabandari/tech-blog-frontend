@@ -5,10 +5,26 @@
     "about": "About",
     "tags": "Tags",
     "login": "Login",
-    "logout":"Logout"
+    "logout": "Logout"
   },
   "login": {},
   "blog": { "readMore": "Read more", "minRead": "min read" },
+  "dashboard": {
+    "title": "Dashboard",
+    "nav": {
+      "myPosts": "My posts",
+      "settings": "Settings",
+      "newPost": "New post"
+    },
+    "myPosts": {
+      "title": "My posts",
+      "subtitle": "Posts you have authored",
+      "empty": "You haven't published any posts yet.",
+      "loading": "Loading your posts..."
+    },
+    "comingSoon": "Soon",
+    "loading": "Loading..."
+  },
   "about": {
     "tag": "About this blog",
     "title": "How this blog works",

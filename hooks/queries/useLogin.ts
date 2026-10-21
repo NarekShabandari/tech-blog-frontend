@@ -16,7 +16,7 @@ export function useLogin() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(["auth", "me"], data.user);
-      router.replace(`/${locale}/`);
+      router.replace(`/${locale}/dashboard`);
     },
   });
 }
