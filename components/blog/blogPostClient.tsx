@@ -64,11 +64,15 @@ export function BlogPostClient({ slug, locale }: Props) {
                 </p>
               </div>
             </div>
-            <div className="w-30 mt-0">
-              <Button onClick={() => publish({ id: post.id, published: true })}>
-                {isPending ? "Publishing..." : "Publish"}
-              </Button>
-            </div>
+            {!post.published && (
+              <div className="w-30 mt-0">
+                <Button
+                  onClick={() => publish({ id: post.id, published: true })}
+                >
+                  {isPending ? "Publishing..." : "Publish"}
+                </Button>
+              </div>
+            )}
           </div>
         </div>
 
