@@ -1,5 +1,12 @@
 import { apiClient } from "@/lib/axios";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+
+interface UpdatePostInput {
+  id: string;
+  title?: string;
+  content?: string;
+  published?: boolean;
+}
 
 export const postKeys = {
   all: ["posts"] as const,
@@ -38,5 +45,20 @@ export function usePost(slug: string) {
       return data.post;
     },
     enabled: !!slug,
+  });
+}
+
+export function useUpdatePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, ...body }: UpdatePostInput) => {
+      const { data } = await apiClient.patch(`/posts/${id}`, body);
+      return data.post;
+    },
+    onSuccess: (post) => {
+      queryClient.invalidateQueries({ queryKey: postKeys.detail(post.slug) });
+      queryClient.invalidateQueries({ queryKey: postKeys.all });
+    },
   });
 }

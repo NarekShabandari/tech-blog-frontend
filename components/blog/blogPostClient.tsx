@@ -1,6 +1,6 @@
 "use client";
 
-import { usePost } from "@/hooks/queries/usePosts";
+import { usePost, useUpdatePost } from "@/hooks/queries/usePosts";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import ReactMarkdown from "react-markdown";
@@ -8,6 +8,7 @@ import rehypeHighlight from "rehype-highlight";
 import rehypeSlug from "rehype-slug";
 import remarkGfm from "remark-gfm";
 import { MainSection } from "../layout/mainSection";
+import Button from "../ui/button";
 
 interface Props {
   slug: string;
@@ -16,6 +17,7 @@ interface Props {
 
 export function BlogPostClient({ slug, locale }: Props) {
   const { data: post, isLoading, isError } = usePost(slug);
+  const { mutate: publish, isPending } = useUpdatePost();
 
   if (isLoading) return <PostSkeleton />;
   if (isError || !post) return notFound();
@@ -44,18 +46,29 @@ export function BlogPostClient({ slug, locale }: Props) {
           {title}
         </h1>
 
-        <div className="flex items-center gap-4 mb-8 pb-8 border-b border-(--border)">
-          <div className="w-9 h-9 rounded-full bg-accent-tint flex items-center justify-center font-bold text-sm text-accent">
-            {post.author?.[0]?.toUpperCase()}
-          </div>
-          <div>
-            <p className="text-sm font-medium text-(--text)">{post.author}</p>
-            <p className="font-mono text-xs text-(--muted)">
-              {new Date(post.created_at).toLocaleDateString(
-                isHy ? "hy-AM" : "en-US",
-                { year: "numeric", month: "long", day: "numeric" },
-              )}
-            </p>
+        <div className="flex items-center mb-8 pb-8 border-b border-(--border)">
+          <div className="flex items-center justify-between w-full">
+            <div className="flex items-center gap-4">
+              <div className="w-9 h-9 rounded-full bg-accent-tint flex items-center justify-center font-bold text-sm text-accent">
+                {post.author?.[0]?.toUpperCase()}
+              </div>
+              <div>
+                <p className="text-sm font-medium text-(--text)">
+                  {post.author}
+                </p>
+                <p className="font-mono text-xs text-(--muted)">
+                  {new Date(post.created_at).toLocaleDateString(
+                    isHy ? "hy-AM" : "en-US",
+                    { year: "numeric", month: "long", day: "numeric" },
+                  )}
+                </p>
+              </div>
+            </div>
+            <div className="w-30 mt-0">
+              <Button onClick={() => publish({ id: post.id, published: true })}>
+                {isPending ? "Publishing..." : "Publish"}
+              </Button>
+            </div>
           </div>
         </div>
 
