@@ -12,19 +12,14 @@ import Button from "../ui/button";
 
 interface Props {
   slug: string;
-  locale: string;
 }
 
-export function BlogPostClient({ slug, locale }: Props) {
+export function BlogPostClient({ slug }: Props) {
   const { data: post, isLoading, isError } = usePost(slug);
   const { mutate: publish, isPending } = useUpdatePost();
 
   if (isLoading) return <PostSkeleton />;
   if (isError || !post) return notFound();
-
-  const isHy = locale === "hy";
-  const title = isHy ? post.title_hy : post.title;
-  const content = isHy ? post.content_hy : post.content;
 
   return (
     <MainSection narrow>
@@ -43,7 +38,7 @@ export function BlogPostClient({ slug, locale }: Props) {
         )}
 
         <h1 className="text-4xl font-bold tracking-tight text-(--text) leading-tight mb-4">
-          {title}
+          {post.title}
         </h1>
 
         <div className="flex items-center mb-8 pb-8 border-b border-(--border)">
@@ -57,10 +52,11 @@ export function BlogPostClient({ slug, locale }: Props) {
                   {post.author}
                 </p>
                 <p className="font-mono text-xs text-(--muted)">
-                  {new Date(post.created_at).toLocaleDateString(
-                    isHy ? "hy-AM" : "en-US",
-                    { year: "numeric", month: "long", day: "numeric" },
-                  )}
+                  {new Date(post.created_at).toLocaleDateString("en-US", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                  })}
                 </p>
               </div>
             </div>
@@ -80,7 +76,7 @@ export function BlogPostClient({ slug, locale }: Props) {
           <div className="relative w-full aspect-video rounded-xl overflow-hidden mb-10">
             <Image
               src={post.cover_image}
-              alt={title}
+              alt={post.title}
               fill
               priority
               className="object-cover"
@@ -108,7 +104,7 @@ export function BlogPostClient({ slug, locale }: Props) {
             remarkPlugins={[remarkGfm]}
             rehypePlugins={[rehypeHighlight, rehypeSlug]}
           >
-            {content}
+            {post.content}
           </ReactMarkdown>
         </div>
       </article>

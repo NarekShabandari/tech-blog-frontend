@@ -1,14 +1,11 @@
 "use client";
 import { useAuth } from "@/hooks/queries/useAuth";
-import { useTranslations } from "next-intl";
 import Link from "next/link";
-import { LanguageSwitcher } from "../ui/languageSwitch";
 import Logo from "../ui/logo";
 import { ThemeToggle } from "../ui/themeToggle";
 import { useLogout } from "@/hooks/queries/useLogout";
 
 export function Header() {
-  const t = useTranslations("nav");
   const { isLoggedIn } = useAuth();
   const { mutate: logout } = useLogout();
 
@@ -20,11 +17,11 @@ export function Header() {
         <div className="hidden md:flex gap-6 ">
           <nav className="md:flex items-center gap-6">
             {[
-              { href: "/", label: t("blog") },
-              { href: "/about", label: t("about") },
+              { href: "/", label: "Blog" },
+              { href: "/about", label: "About" },
             ]
               .concat(
-                !isLoggedIn ? [{ href: "/login", label: t("login") }] : [],
+                !isLoggedIn ? [{ href: "/login", label: "Login" }] : [],
               )
               .map(({ href, label }) => (
                 <Link
@@ -41,7 +38,7 @@ export function Header() {
               className=" text-sm font-medium text-(--muted) hover:text-(--text) transition-colors cursor-pointer"
               onClick={() => logout()}
             >
-              {t("logout")}
+              Logout
             </button>
           )}
         </div>
@@ -53,7 +50,6 @@ export function Header() {
           >
             <Search size={16} />
           </button> */}
-          <LanguageSwitcher />
           <ThemeToggle />
         </div>
       </div>

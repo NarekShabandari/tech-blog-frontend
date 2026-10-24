@@ -1,9 +1,8 @@
+import { Footer } from "@/components/layout/footer";
+import { Header } from "@/components/layout/header";
+import { Providers } from "@/providers";
 import type { Metadata } from "next";
-import {
-  JetBrains_Mono,
-  Noto_Sans_Armenian,
-  Space_Grotesk,
-} from "next/font/google";
+import { JetBrains_Mono, Space_Grotesk } from "next/font/google";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -20,26 +19,20 @@ const jetbrainsMono = JetBrains_Mono({
   display: "swap",
 });
 
-const notoSansArmenian = Noto_Sans_Armenian({
-  subsets: ["armenian"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-noto-armenian",
-  display: "swap",
-});
-
 export const metadata: Metadata = {
   title: "Haylog",
   description: "Haylog is a tech blog focused on javascript",
 };
 
-export default async function LocaleLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
     <html
-      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}  ${notoSansArmenian.variable}`}
+      lang="en"
+      className={`${spaceGrotesk.variable} ${jetbrainsMono.variable}`}
     >
       <head>
         {process.env.NEXT_PUBLIC_UMAMI_URL &&
@@ -51,7 +44,15 @@ export default async function LocaleLayout({
             />
           )}
       </head>
-      <body className="min-h-full flex flex-col">{children}</body>
+      <body className="min-h-full flex flex-col">
+        <Providers>
+          <div className="min-h-screen flex flex-col bg-(--bg)">
+            <Header />
+            <div className="flex-1">{children}</div>
+            <Footer />
+          </div>
+        </Providers>
+      </body>
     </html>
   );
 }

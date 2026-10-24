@@ -1,13 +1,11 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 import { apiClient } from "@/lib/axios";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 
 export function useLogin() {
   const queryClient = useQueryClient();
   const router = useRouter();
-  const locale = useLocale();
 
   return useMutation({
     mutationFn: async (credentials: { email: string; password: string }) => {
@@ -16,7 +14,7 @@ export function useLogin() {
     },
     onSuccess: (data) => {
       queryClient.setQueryData(["auth", "me"], data.user);
-      router.replace(`/${locale}/dashboard`);
+      router.replace("/dashboard");
     },
   });
 }

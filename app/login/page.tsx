@@ -6,12 +6,10 @@ import Input from "@/components/ui/input";
 import Logo from "@/components/ui/logo";
 import { useLogin } from "@/hooks/queries/useLogin";
 import { AlertCircle, Lock, Mail } from "lucide-react";
-import { useLocale } from "next-intl";
 import Link from "next/link";
 import { useState } from "react";
 
 export default function LoginPage() {
-  const locale = useLocale();
   const { mutate: login, isPending, isError, error } = useLogin();
 
   const [email, setEmail] = useState("");
@@ -94,7 +92,7 @@ export default function LoginPage() {
 
         <p className="text-center font-mono text-xs text-(--muted) mt-6">
           <Link
-            href={`/${locale}`}
+            href="/"
             className="hover:text-(--text) transition-colors"
           >
             ← back to blog

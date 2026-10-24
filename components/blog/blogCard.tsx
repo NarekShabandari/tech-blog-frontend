@@ -1,6 +1,5 @@
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
 
 interface BlogCardProps {
   slug: string;
@@ -8,7 +7,6 @@ interface BlogCardProps {
   cover_image: string;
   created_at: string;
   tags: string[];
-  title_hy: string;
 }
 
 export function BlogCard({
@@ -17,20 +15,14 @@ export function BlogCard({
   cover_image,
   created_at,
   tags,
-  title_hy,
 }: BlogCardProps) {
-  const { locale } = useParams();
-
-  const isHy = locale === "hy";
-  const blogTitle = isHy ? title_hy : title;
-
   return (
     <Link href={`/blog/${slug}`} className="group block">
       <article className="h-full rounded-xl border border-(--border) bg-(--surface) overflow-hidden hover:border-accent transition-colors duration-200">
         <div className="relative aspect-video overflow-hidden bg-(--subtle)">
           <Image
             src={cover_image}
-            alt={blogTitle}
+            alt={title}
             fill
             loading="eager"
             className="object-cover group-hover:scale-105 transition-transform duration-300"
@@ -45,7 +37,7 @@ export function BlogCard({
 
           {/* Title */}
           <h2 className="mt-2 text-base font-semibold leading-snug text-(--text) group-hover:text-accent transition-colors line-clamp-2">
-            {blogTitle}
+            {title}
           </h2>
 
           {/* Meta */}

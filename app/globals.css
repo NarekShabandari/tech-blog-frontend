@@ -5,7 +5,6 @@
 @theme {
   --font-sans: var(--font-space-grotesk), system-ui, sans-serif;
   --font-mono: var(--font-jetbrains-mono), monospace;
-  --font-armenian: var(--font-noto-armenian), sans-serif;
 
   /* Brand */
   --color-accent: #6c63ff;
@@ -82,15 +81,4 @@ kbd {
     border-radius: 10px;
     overflow-x: auto;
   } */
-
-  :lang(hy) {
-    font-family: var(--font-armenian);
-    line-height: 1.8;
-    word-spacing: 0.05em;
-  }
-
-  :lang(hy) code,
-  :lang(hy) pre {
-    font-family: var(--font-mono);
-  }
 }

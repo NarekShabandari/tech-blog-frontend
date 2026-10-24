@@ -14,8 +14,3 @@ export default function HomePage() {
     </MainSection>
   );
 }
-
-// Single post page — narrow layout
-<MainSection narrow>
-  <article>...</article>
-</MainSection>;
