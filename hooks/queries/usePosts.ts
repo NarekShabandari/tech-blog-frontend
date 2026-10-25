@@ -8,6 +8,12 @@ interface UpdatePostInput {
   published?: boolean;
 }
 
+interface GeneratePostInput {
+  topic: string;
+  targetKeyword: string;
+  audience?: string;
+}
+
 export const postKeys = {
   all: ["posts"] as const,
   lists: () => [...postKeys.all, "list"] as const,
@@ -58,6 +64,20 @@ export function useUpdatePost() {
     },
     onSuccess: (post) => {
       queryClient.invalidateQueries({ queryKey: postKeys.detail(post.slug) });
+      queryClient.invalidateQueries({ queryKey: postKeys.all });
+    },
+  });
+}
+
+export function useGeneratePost() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async (body: GeneratePostInput) => {
+      const { data } = await apiClient.post("/posts/generate", body);
+      return data.post;
+    },
+    onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: postKeys.all });
     },
   });

@@ -1,6 +1,6 @@
 "use client";
 
-import { FileText, Settings, SquarePen } from "lucide-react";
+import { FileText, Settings, Sparkles, SquarePen } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ComponentType } from "react";
@@ -13,11 +13,17 @@ interface NavItem {
 }
 
 /**
- * Dashboard navigation. Only the "My posts" route is enabled for now;
- * "Settings" and "New post" are rendered as disabled placeholders.
+ * Dashboard navigation. "Settings" and "New post" are rendered as disabled
+ * placeholders.
  */
 const navItems: NavItem[] = [
   { href: "/dashboard", label: "My posts", icon: FileText, enabled: true },
+  {
+    href: "/dashboard/generate",
+    label: "Generate post",
+    icon: Sparkles,
+    enabled: true,
+  },
   {
     href: "/dashboard/settings",
     label: "Settings",
