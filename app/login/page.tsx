@@ -4,26 +4,40 @@ import Button from "@/components/ui/button";
 import Card from "@/components/ui/card";
 import Input from "@/components/ui/input";
 import Logo from "@/components/ui/logo";
-import { useLogin } from "@/hooks/queries/useLogin";
+import { getErrorMessage } from "@/lib/axios";
+import { useAuthentication } from "@/providers/AuthProvider";
 import { AlertCircle, Lock, Mail } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function LoginPage() {
-  const { mutate: login, isPending, isError, error } = useLogin();
+  const { login, user, loading: sessionLoading } = useAuthentication();
+  const router = useRouter();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPass, setShowPass] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  // Already signed in (or just signed in) → go to the dashboard
+  useEffect(() => {
+    if (!sessionLoading && user) router.replace("/dashboard");
+  }, [sessionLoading, user, router]);
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    login({ email, password });
+    setError(null);
+    setLoading(true);
+    try {
+      await login(email, password);
+    } catch (err) {
+      setError(getErrorMessage(err, "Invalid credentials"));
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const errorMessage =
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    (error as any)?.response?.data?.message ?? "Invalid credentials";
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-(--bg) px-4">
@@ -33,14 +47,14 @@ export default function LoginPage() {
         <Card>
           <h1 className="text-xl font-bold text-(--text) mb-6">Sign in</h1>
 
-          {isError && (
+          {error && (
             <div className="flex items-center gap-2 p-3 rounded-lg bg-red-50 border border-red-200 text-red-600 text-sm mb-5">
               <AlertCircle size={15} className="shrink-0" />
-              {errorMessage}
+              {error}
             </div>
           )}
 
-          <div className="space-y-4">
+          <form className="space-y-4" onSubmit={handleSubmit}>
             <Input
               icon={
                 <Mail
@@ -74,11 +88,8 @@ export default function LoginPage() {
               onVisibilityClick={() => setShowPass(!showPass)}
             />
 
-            <Button
-              onClick={handleSubmit}
-              disabled={isPending || !email || !password}
-            >
-              {isPending ? (
+            <Button type="submit" disabled={loading || !email || !password}>
+              {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
                   Signing in...
@@ -87,14 +98,11 @@ export default function LoginPage() {
                 "Sign in"
               )}
             </Button>
-          </div>
+          </form>
         </Card>
 
         <p className="text-center font-mono text-xs text-(--muted) mt-6">
-          <Link
-            href="/"
-            className="hover:text-(--text) transition-colors"
-          >
+          <Link href="/" className="hover:text-(--text) transition-colors">
             ← back to blog
           </Link>
         </p>

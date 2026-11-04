@@ -1,13 +1,13 @@
 "use client";
 import { useAuth } from "@/hooks/queries/useAuth";
+import { useAuthentication } from "@/providers/AuthProvider";
 import Link from "next/link";
 import Logo from "../ui/logo";
 import { ThemeToggle } from "../ui/themeToggle";
-import { useLogout } from "@/hooks/queries/useLogout";
 
 export function Header() {
   const { isLoggedIn } = useAuth();
-  const { mutate: logout } = useLogout();
+  const { logout } = useAuthentication();
 
   return (
     <header className="sticky top-0 z-50 w-full border-b border-(--border) bg-(--surface)/80 backdrop-blur-md">
@@ -20,9 +20,7 @@ export function Header() {
               { href: "/", label: "Blog" },
               { href: "/about", label: "About" },
             ]
-              .concat(
-                !isLoggedIn ? [{ href: "/login", label: "Login" }] : [],
-              )
+              .concat(!isLoggedIn ? [{ href: "/login", label: "Login" }] : [])
               .map(({ href, label }) => (
                 <Link
                   key={href}

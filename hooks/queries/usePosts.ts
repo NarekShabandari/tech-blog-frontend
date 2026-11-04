@@ -19,6 +19,10 @@ export const postKeys = {
   lists: () => [...postKeys.all, "list"] as const,
   list: (f: object) => [...postKeys.lists(), f] as const,
   detail: (slug: string) => [...postKeys.all, "detail", slug] as const,
+  // Separate from lists() so the user's drafts never share a cache entry with
+  // the public post list
+  mine: () => [...postKeys.all, "mine"] as const,
+  myList: (f: object) => [...postKeys.mine(), f] as const,
 };
 
 export function usePosts(params?: { category?: string; search?: string }) {
@@ -34,7 +38,7 @@ export function usePosts(params?: { category?: string; search?: string }) {
 
 export function useMyPosts(params?: { category?: string; search?: string }) {
   return useQuery({
-    queryKey: postKeys.list(params ?? {}),
+    queryKey: postKeys.myList(params ?? {}),
     queryFn: async () => {
       const { data } = await apiClient.get("/posts/my", { params });
       return data.posts;
