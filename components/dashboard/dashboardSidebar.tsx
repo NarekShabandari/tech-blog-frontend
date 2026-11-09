@@ -28,7 +28,7 @@ const navItems: NavItem[] = [
     href: "/dashboard/settings",
     label: "Settings",
     icon: Settings,
-    enabled: false,
+    enabled: true,
   },
   {
     href: "/dashboard/new",

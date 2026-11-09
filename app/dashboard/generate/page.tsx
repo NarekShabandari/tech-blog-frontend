@@ -6,11 +6,13 @@ import Input from "@/components/ui/input";
 import { useGeneratePost } from "@/hooks/queries/usePosts";
 import { AlertCircle, CheckCircle2, Heading, Tag, Users } from "lucide-react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 const iconClass = "absolute left-3 top-1/2 -translate-y-1/2 text-(--muted)";
 
 export default function GeneratePostPage() {
+  const router = useRouter();
   const {
     mutate: generate,
     data: post,
@@ -26,11 +28,18 @@ export default function GeneratePostPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    generate({
-      topic: title.trim(),
-      targetKeyword: keywords.trim(),
-      audience: audience.trim() || undefined,
-    });
+    generate(
+      {
+        topic: title.trim(),
+        targetKeyword: keywords.trim(),
+        audience: audience.trim() || undefined,
+      },
+      {
+        onSuccess: (post) => {
+          router.push(`/blog/${post.slug}`);
+        },
+      }
+    );
   };
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
